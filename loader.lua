@@ -1,4 +1,4 @@
--- Pistol Arena Ultimate v3.0 | plalettescripts
+-- Pistol Arena Ultimate v3.1 FIXED | plalettescripts
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
@@ -29,12 +29,6 @@ local function ClearESP()
     for _, d in pairs(ESPDrawings) do pcall(function() d:Remove() end) end
     ESPDrawings = {}
     if FOVCircle then pcall(function() FOVCircle:Remove() end) FOVCircle = nil end
-end
-
-local function AddESP(d)
-    if #ESPDrawings >= 100 then table.remove(ESPDrawings, 1):Remove() end
-    table.insert(ESPDrawings, d)
-    return d
 end
 
 local function GetBestTarget()
@@ -108,7 +102,7 @@ PS.Size = UDim2.new(1, 0, 0, 14)
 PS.Position = UDim2.new(0, 0, 0, 38)
 PS.BackgroundTransparency = 1
 PS.TextColor3 = Color3.fromRGB(160, 120, 150)
-PS.Text = "v3.0 · plalettescripts"
+PS.Text = "v3.1 · plalettescripts"
 PS.Font = Enum.Font.SourceSans
 PS.TextSize = 11
 PS.Parent = PF
@@ -184,15 +178,6 @@ function LoadMain()
     Glow.Parent = Main
     Instance.new("UICorner", Glow).CornerRadius = UDim.new(0, 14)
 
-    task.spawn(function()
-        local a = 0
-        while GUI and GUI.Parent do
-            a = (a + 0.02) % (math.pi * 2)
-            pcall(function() Glow.BackgroundTransparency = 0.52 - math.sin(a) * 0.25 end)
-            task.wait(0.05)
-        end
-    end)
-
     local Mini = Instance.new("Frame")
     Mini.Size = UDim2.new(0, 160, 0, 28)
     Mini.Position = UDim2.new(0.01, 0, 0.08, 0)
@@ -209,7 +194,7 @@ function LoadMain()
     MT.Size = UDim2.new(1, 0, 1, 0)
     MT.BackgroundTransparency = 1
     MT.TextColor3 = Color3.fromRGB(255, 160, 200)
-    MT.Text = "🔫 v3.0 | plalettescripts"
+    MT.Text = "🔫 v3.1 | plalettescripts"
     MT.Font = Enum.Font.SourceSansBold
     MT.TextSize = 11
     MT.Parent = Mini
@@ -235,7 +220,7 @@ function LoadMain()
     HT.Position = UDim2.new(0.05, 0, 0, 3)
     HT.BackgroundTransparency = 1
     HT.TextColor3 = Color3.fromRGB(255, 160, 210)
-    HT.Text = "Pistol Arena v3.0"
+    HT.Text = "Pistol Arena v3.1"
     HT.Font = Enum.Font.SourceSansBold
     HT.TextSize = 15
     HT.TextXAlignment = Enum.TextXAlignment.Left
@@ -277,7 +262,7 @@ function LoadMain()
     Scroll.BorderSizePixel = 0
     Scroll.ScrollBarThickness = 2
     Scroll.ScrollBarImageColor3 = Color3.fromRGB(255, 80, 160)
-    Scroll.CanvasSize = UDim2.new(0, 0, 0, 850)
+    Scroll.CanvasSize = UDim2.new(0, 0, 0, 700)
     Scroll.Parent = Main
 
     local SL = Instance.new("UIListLayout")
@@ -286,14 +271,14 @@ function LoadMain()
     SL.SortOrder = Enum.SortOrder.LayoutOrder
     SL.Parent = Scroll
 
-    local function Sec(t)
+    -- Section
+    local function Section(t)
         local f = Instance.new("Frame")
-        f.Size = UDim2.new(1, -4, 0, 18)
+        f.Size = UDim2.new(1, 0, 0, 18)
         f.BackgroundTransparency = 1
         f.Parent = Scroll
         local l = Instance.new("TextLabel")
         l.Size = UDim2.new(1, 0, 1, 0)
-        l.Position = UDim2.new(0, 4, 0, 0)
         l.BackgroundTransparency = 1
         l.TextColor3 = Color3.fromRGB(255, 130, 180)
         l.Text = "▸ " .. t
@@ -303,15 +288,16 @@ function LoadMain()
         l.Parent = f
     end
 
-    local function Tog(name, key)
+    -- Toggle
+    local function Toggle(name, key)
         local f = Instance.new("Frame")
-        f.Size = UDim2.new(1, -4, 0, 30)
+        f.Size = UDim2.new(1, 0, 0, 30)
         f.BackgroundColor3 = Color3.fromRGB(24, 24, 34)
         f.BackgroundTransparency = 0.2
         f.Parent = Scroll
         Instance.new("UICorner", f).CornerRadius = UDim.new(0, 8)
         local l = Instance.new("TextLabel")
-        l.Size = UDim2.new(0.5, 0, 1, 0)
+        l.Size = UDim2.new(0.55, 0, 1, 0)
         l.Position = UDim2.new(0.06, 0, 0, 0)
         l.BackgroundTransparency = 1
         l.TextColor3 = Color3.fromRGB(210, 200, 225)
@@ -322,7 +308,7 @@ function LoadMain()
         l.Parent = f
         local track = Instance.new("Frame")
         track.Size = UDim2.new(0, 40, 0, 22)
-        track.Position = UDim2.new(1, -46, 0, 4)
+        track.Position = UDim2.new(1, -48, 0, 4)
         track.BackgroundColor3 = Color3.fromRGB(45, 40, 50)
         track.BackgroundTransparency = 0.25
         track.BorderSizePixel = 0
@@ -351,10 +337,11 @@ function LoadMain()
         end)
     end
 
-    local function Sli(name, key, min, max, def)
+    -- Slider
+    local function Slider(name, key, min, max, def)
         Config[key] = def
         local f = Instance.new("Frame")
-        f.Size = UDim2.new(1, -4, 0, 44)
+        f.Size = UDim2.new(1, 0, 0, 44)
         f.BackgroundColor3 = Color3.fromRGB(24, 24, 34)
         f.BackgroundTransparency = 0.2
         f.Parent = Scroll
@@ -401,42 +388,42 @@ function LoadMain()
         end)
     end
 
-    -- Build Menu
-    Sec("🎯 FOV Aimbot")
-    Tog("FOV Aimbot", "Aimbot")
-    Sli("FOV Radius", "AimCircleRadius", 30, 300, 120)
-    Sli("FOV Thickness", "AimCircleThickness", 0.5, 4, 1.5)
-    Tog("FOV Filled", "AimCircleFilled")
-    Tog("Silent Aim", "SilentAim")
+    -- BUILD
+    Section("FOV Aimbot")
+    Toggle("FOV Aimbot", "Aimbot")
+    Slider("FOV Radius", "AimCircleRadius", 30, 300, 120)
+    Slider("Thickness", "AimCircleThickness", 0.5, 4, 1.5)
+    Toggle("Filled", "AimCircleFilled")
+    Toggle("Silent Aim", "SilentAim")
 
-    Sec("🔫 Weapon")
-    Tog("Triggerbot", "Triggerbot")
-    Tog("Hitbox Expander", "HitboxExpander")
-    Sli("Hitbox Size", "HitboxSize", 1, 8, 3)
+    Section("Weapon")
+    Toggle("Triggerbot", "Triggerbot")
+    Toggle("Hitbox Expander", "HitboxExpander")
+    Slider("Hitbox Size", "HitboxSize", 1, 8, 3)
 
-    Sec("👁 ESP")
-    Tog("Player ESP", "ESP")
-    Tog("ESP Boxes", "ESPBoxes")
-    Tog("ESP Names", "ESPNames")
-    Tog("ESP Distance", "ESPDistance")
-    Tog("Tracers", "Tracers")
-    Tog("Radar", "Radar")
+    Section("ESP")
+    Toggle("Player ESP", "ESP")
+    Toggle("Boxes", "ESPBoxes")
+    Toggle("Names", "ESPNames")
+    Toggle("Distance", "ESPDistance")
+    Toggle("Tracers", "Tracers")
+    Toggle("Radar", "Radar")
 
-    Sec("🏃 Movement")
-    Tog("Speed Hack", "SpeedHack")
-    Sli("Walk Speed", "SpeedValue", 16, 28, 24)
-    Tog("Fly (Slow)", "Fly")
-    Sli("Fly Speed", "FlySpeed", 15, 35, 25)
+    Section("Movement")
+    Toggle("Speed Hack", "SpeedHack")
+    Slider("Walk Speed", "SpeedValue", 16, 28, 24)
+    Toggle("Fly", "Fly")
+    Slider("Fly Speed", "FlySpeed", 15, 35, 25)
 
-    Sec("🌍 World")
-    Tog("Fullbright", "Fullbright")
-    Tog("Anti-AFK", "AntiAFK")
+    Section("World")
+    Toggle("Fullbright", "Fullbright")
+    Toggle("Anti-AFK", "AntiAFK")
 
     local Foot = Instance.new("TextLabel")
-    Foot.Size = UDim2.new(1, -4, 0, 14)
+    Foot.Size = UDim2.new(1, 0, 0, 14)
     Foot.BackgroundTransparency = 1
     Foot.TextColor3 = Color3.fromRGB(140, 110, 140)
-    Foot.Text = "v3.0 · plalettescripts"
+    Foot.Text = "v3.1 · plalettescripts"
     Foot.Font = Enum.Font.SourceSans
     Foot.TextSize = 9
     Foot.Parent = Scroll
@@ -465,9 +452,9 @@ function LoadMain()
         while task.wait() do
             if Config.Aimbot and not Config.SilentAim then
                 pcall(function()
-                    local target = GetBestTarget()
-                    if target and target.Character and target.Character:FindFirstChild("Head") then
-                        Camera.CFrame = CFrame.new(Camera.CFrame.Position, target.Character.Head.Position)
+                    local t = GetBestTarget()
+                    if t and t.Character and t.Character:FindFirstChild("Head") then
+                        Camera.CFrame = CFrame.new(Camera.CFrame.Position, t.Character.Head.Position)
                     end
                 end)
             end
@@ -475,16 +462,16 @@ function LoadMain()
     end)
 
     -- Silent Aim
-    local oldNamecall = hookmetamethod(game, "__namecall", function(self, ...)
-        local method = getnamecallmethod()
-        local args = {...}
-        if method == "FireServer" and Config.SilentAim and Config.Aimbot then
-            local target = GetBestTarget()
-            if target and target.Character and target.Character:FindFirstChild("Head") and args[1] then
-                args[1] = target.Character.Head.Position
+    local old = hookmetamethod(game, "__namecall", function(self, ...)
+        local m = getnamecallmethod()
+        local a = {...}
+        if m == "FireServer" and Config.SilentAim and Config.Aimbot then
+            local t = GetBestTarget()
+            if t and t.Character and t.Character:FindFirstChild("Head") and a[1] then
+                a[1] = t.Character.Head.Position
             end
         end
-        return oldNamecall(self, unpack(args))
+        return old(self, unpack(a))
     end)
 
     -- Triggerbot
@@ -494,10 +481,9 @@ function LoadMain()
                 pcall(function()
                     local tool = LocalPlayer.Character:FindFirstChildOfClass("Tool")
                     if tool then
-                        local target = GetBestTarget()
-                        if target and target.Character and target.Character:FindFirstChild("Head") then
-                            if tool:FindFirstChild("Shoot") then tool.Shoot:FireServer(target.Character.Head.Position) end
-                            if tool:FindFirstChild("Fire") then tool:FireServer(target.Character.Head.Position) end
+                        local t = GetBestTarget()
+                        if t and t.Character and t.Character:FindFirstChild("Head") then
+                            if tool:FindFirstChild("Shoot") then tool.Shoot:FireServer(t.Character.Head.Position) end
                         end
                     end
                 end)
@@ -505,14 +491,13 @@ function LoadMain()
         end
     end)
 
-    -- Hitbox Expander
+    -- Hitbox
     task.spawn(function()
         while task.wait(0.25) do
             if Config.HitboxExpander then
-                local s = Config.HitboxSize
                 for _, p in ipairs(Players:GetPlayers()) do
                     if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
-                        p.Character.HumanoidRootPart.Size = Vector3.new(s, s, s)
+                        p.Character.HumanoidRootPart.Size = Vector3.new(Config.HitboxSize, Config.HitboxSize, Config.HitboxSize)
                         p.Character.HumanoidRootPart.Transparency = 0.35
                     end
                 end
@@ -530,42 +515,42 @@ function LoadMain()
                         local head = p.Character:FindFirstChild("Head")
                         local hrp = p.Character:FindFirstChild("HumanoidRootPart")
                         if head and hrp then
-                            local hPos, onScreen = Camera:WorldToViewportPoint(head.Position + Vector3.new(0, 0.5, 0))
-                            local fPos = Camera:WorldToViewportPoint(hrp.Position - Vector3.new(0, 3, 0))
-                            if onScreen then
-                                local h = math.abs(hPos.Y - fPos.Y)
+                            local hp, on = Camera:WorldToViewportPoint(head.Position + Vector3.new(0, 0.5, 0))
+                            local fp = Camera:WorldToViewportPoint(hrp.Position - Vector3.new(0, 3, 0))
+                            if on then
+                                local h = math.abs(hp.Y - fp.Y)
                                 local w = h / 2
                                 if Config.ESPBoxes then
-                                    local box = AddESP(Drawing.new("Square"))
-                                    box.Color = Color3.fromRGB(255, 80, 180)
-                                    box.Thickness = 1.2
-                                    box.Size = Vector2.new(w, h)
-                                    box.Position = Vector2.new(hPos.X - w/2, hPos.Y)
-                                    box.Filled = false
-                                    box.Visible = true
+                                    local b = Drawing.new("Square")
+                                    b.Color = Color3.fromRGB(255, 80, 180)
+                                    b.Thickness = 1.2
+                                    b.Size = Vector2.new(w, h)
+                                    b.Position = Vector2.new(hp.X - w/2, hp.Y)
+                                    b.Filled = false
+                                    b.Visible = true
+                                    table.insert(ESPDrawings, b)
                                 end
-                                local yOff = 0
                                 if Config.ESPNames then
-                                    local nm = AddESP(Drawing.new("Text"))
-                                    nm.Text = p.Name
-                                    nm.Color = Color3.fromRGB(255, 220, 240)
-                                    nm.Size = 12
-                                    nm.Position = Vector2.new(hPos.X, hPos.Y - 18)
-                                    nm.Center = true
-                                    nm.Visible = true
-                                    yOff = 14
+                                    local n = Drawing.new("Text")
+                                    n.Text = p.Name
+                                    n.Color = Color3.fromRGB(255, 220, 240)
+                                    n.Size = 12
+                                    n.Position = Vector2.new(hp.X, hp.Y - 18)
+                                    n.Center = true
+                                    n.Visible = true
+                                    table.insert(ESPDrawings, n)
                                 end
                                 if Config.ESPDistance and LocalPlayer.Character then
-                                    local myHrp = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-                                    if myHrp then
-                                        local dist = math.floor((hrp.Position - myHrp.Position).Magnitude)
-                                        local dt = AddESP(Drawing.new("Text"))
-                                        dt.Text = dist .. "m"
-                                        dt.Color = Color3.fromRGB(200, 180, 200)
-                                        dt.Size = 10
-                                        dt.Position = Vector2.new(hPos.X, hPos.Y - 18 + yOff)
-                                        dt.Center = true
-                                        dt.Visible = true
+                                    local mh = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+                                    if mh then
+                                        local d = Drawing.new("Text")
+                                        d.Text = math.floor((hrp.Position - mh.Position).Magnitude) .. "m"
+                                        d.Color = Color3.fromRGB(200, 180, 200)
+                                        d.Size = 10
+                                        d.Position = Vector2.new(hp.X, hp.Y - 4)
+                                        d.Center = true
+                                        d.Visible = true
+                                        table.insert(ESPDrawings, d)
                                     end
                                 end
                             end
@@ -573,33 +558,33 @@ function LoadMain()
                     end
                 end
             end
-
             if Config.Tracers then
                 for _, p in ipairs(Players:GetPlayers()) do
                     if p ~= LocalPlayer and p.Character and p.Character:FindFirstChild("HumanoidRootPart") then
-                        local pos, onScreen = Camera:WorldToViewportPoint(p.Character.HumanoidRootPart.Position)
-                        if onScreen then
-                            local l = AddESP(Drawing.new("Line"))
+                        local pos, on = Camera:WorldToViewportPoint(p.Character.HumanoidRootPart.Position)
+                        if on then
+                            local l = Drawing.new("Line")
                             l.Color = Color3.fromRGB(255, 120, 200)
                             l.Thickness = 0.5
                             l.From = Vector2.new(Camera.ViewportSize.X/2, Camera.ViewportSize.Y)
                             l.To = Vector2.new(pos.X, pos.Y)
                             l.Visible = true
+                            table.insert(ESPDrawings, l)
                         end
                     end
                 end
             end
-
             if Config.Radar then
                 local rs = 55
                 local rx = Camera.ViewportSize.X - rs - 6
                 local ry = Camera.ViewportSize.Y - rs - 6
-                local bg = AddESP(Drawing.new("Square"))
+                local bg = Drawing.new("Square")
                 bg.Color = Color3.fromRGB(0, 0, 0)
                 bg.Size = Vector2.new(rs, rs)
                 bg.Position = Vector2.new(rx, ry)
                 bg.Filled = true
                 bg.Visible = true
+                table.insert(ESPDrawings, bg)
                 if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
                     local my = LocalPlayer.Character.HumanoidRootPart
                     for _, pl in ipairs(Players:GetPlayers()) do
@@ -608,12 +593,13 @@ function LoadMain()
                             local off = tp.Position - my.Position
                             local rd = math.clamp(off.Magnitude/3, 0, rs/2-2)
                             local a = math.atan2(off.Z, off.X)
-                            local d = AddESP(Drawing.new("Circle"))
+                            local d = Drawing.new("Circle")
                             d.Color = pl == LocalPlayer and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 80, 180)
                             d.Radius = 2
                             d.Position = Vector2.new(rx+rs/2+math.cos(a)*rd, ry+rs/2+math.sin(a)*rd)
                             d.Filled = true
                             d.Visible = true
+                            table.insert(ESPDrawings, d)
                         end
                     end
                 end
@@ -621,7 +607,7 @@ function LoadMain()
         end
     end)
 
-    -- Speed Hack
+    -- Speed
     RunService.Stepped:Connect(function()
         if Config.SpeedHack and LocalPlayer.Character then
             local h = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
@@ -653,23 +639,22 @@ function LoadMain()
         end
     end)
 
-    -- Fullbright + Anti-AFK
+    -- Fullbright + AntiAFK
     task.spawn(function()
-        while task.wait(1) do
+        while task.wait(60) do
             if Config.Fullbright then
                 Lighting.Brightness = 2
                 Lighting.ClockTime = 14
             end
             if Config.AntiAFK then
                 pcall(function()
-                    local VIM = game:GetService("VirtualInputManager")
-                    VIM:SendKeyEvent(true, Enum.KeyCode.Space, false, nil)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(true, Enum.KeyCode.Space, false, nil)
                     task.wait(0.1)
-                    VIM:SendKeyEvent(false, Enum.KeyCode.Space, false, nil)
+                    game:GetService("VirtualInputManager"):SendKeyEvent(false, Enum.KeyCode.Space, false, nil)
                 end)
             end
         end
     end)
 
-    print("🔫 Pistol Arena v3.0 | plalettescripts")
+    print("🔫 Pistol Arena v3.1 | plalettescripts")
 end
