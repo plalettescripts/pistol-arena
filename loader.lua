@@ -1,15 +1,15 @@
--- Pistol Arena v5.0 FINAL | plalettescripts
+-- Pistol Arena v5.1 | plalettescripts
 local Players = game:GetService("Players")
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local Workspace = game:GetService("Workspace")
 local CoreGui = game:GetService("CoreGui")
 local Lighting = game:GetService("Lighting")
+local TweenService = game:GetService("TweenService")
 local LocalPlayer = Players.LocalPlayer
 local Camera = Workspace.CurrentCamera
 local PASSWORD = "plalette1"
 
--- EINFACHE VARIABLEN (so wie Fly Test)
 local AimbotOn = false
 local AimRadius = 120
 local SilentOn = false
@@ -89,9 +89,11 @@ local function NOTAUS()
     Lighting.Brightness = 1
 end
 
--- Password
-local PG = Instance.new("ScreenGui")
-PG.Parent = CoreGui
+-- Password Screen
+local PassGui = Instance.new("ScreenGui")
+PassGui.Parent = CoreGui
+PassGui.ResetOnSpawn = false
+
 local PF = Instance.new("Frame")
 PF.Size = UDim2.new(0, 240, 0, 140)
 PF.Position = UDim2.new(0.5, -120, 0.5, -70)
@@ -99,7 +101,7 @@ PF.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
 PF.BorderSizePixel = 0
 PF.Active = true
 PF.Draggable = true
-PF.Parent = PG
+PF.Parent = PassGui
 Instance.new("UICorner", PF).CornerRadius = UDim.new(0, 12)
 
 local PT = Instance.new("TextLabel")
@@ -107,7 +109,7 @@ PT.Size = UDim2.new(1, 0, 0, 22)
 PT.Position = UDim2.new(0, 0, 0, 15)
 PT.BackgroundTransparency = 1
 PT.TextColor3 = Color3.fromRGB(200, 200, 220)
-PT.Text = "Pistol Arena v5.0"
+PT.Text = "Pistol Arena v5.1"
 PT.Font = Enum.Font.SourceSansBold
 PT.TextSize = 18
 PT.Parent = PF
@@ -147,7 +149,7 @@ Instance.new("UICorner", PB).CornerRadius = UDim.new(0, 8)
 
 local function Try()
     if PI.Text == PASSWORD then
-        PG:Destroy()
+        PassGui:Destroy()
         Load()
     else
         PI.Text = ""
@@ -162,10 +164,11 @@ PI.FocusLost:Connect(function(ep) if ep then Try() end end)
 function Load()
     local GUI = Instance.new("ScreenGui")
     GUI.Parent = CoreGui
+    GUI.ResetOnSpawn = false
 
     local M = Instance.new("Frame")
-    M.Size = UDim2.new(0, 560, 0, 380)
-    M.Position = UDim2.new(0.5, -280, 0.5, -190)
+    M.Size = UDim2.new(0, 580, 0, 400)
+    M.Position = UDim2.new(0.5, -290, 0.5, -200)
     M.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
     M.BackgroundTransparency = 0.04
     M.BorderSizePixel = 0
@@ -183,9 +186,10 @@ function Load()
     GL.Parent = M
     Instance.new("UICorner", GL).CornerRadius = UDim.new(0, 10)
 
+    -- Minimized
     local MN = Instance.new("Frame")
-    MN.Size = UDim2.new(0, 170, 0, 28)
-    MN.Position = UDim2.new(0.5, -85, 0.02, 0)
+    MN.Size = UDim2.new(0, 180, 0, 28)
+    MN.Position = UDim2.new(0.5, -90, 0.02, 0)
     MN.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
     MN.BackgroundTransparency = 0.04
     MN.BorderSizePixel = 0
@@ -198,7 +202,7 @@ function Load()
     MT.Size = UDim2.new(1, 0, 1, 0)
     MT.BackgroundTransparency = 1
     MT.TextColor3 = Color3.fromRGB(200, 200, 220)
-    MT.Text = "v5.0 | plalettescripts | CTRL"
+    MT.Text = "v5.1 | plalettescripts | CTRL"
     MT.Font = Enum.Font.SourceSansBold
     MT.TextSize = 11
     MT.Parent = MN
@@ -211,8 +215,9 @@ function Load()
         end
     end)
 
+    -- Header
     local H = Instance.new("Frame")
-    H.Size = UDim2.new(1, 0, 0, 36)
+    H.Size = UDim2.new(1, 0, 0, 40)
     H.BackgroundColor3 = Color3.fromRGB(24, 24, 24)
     H.BorderSizePixel = 0
     H.Parent = M
@@ -223,30 +228,31 @@ function Load()
     HT.Position = UDim2.new(0, 14, 0, 0)
     HT.BackgroundTransparency = 1
     HT.TextColor3 = Color3.fromRGB(255, 255, 255)
-    HT.Text = "Pistol Arena v5.0"
+    HT.Text = "Pistol Arena v5.1"
     HT.Font = Enum.Font.SourceSansBold
     HT.TextSize = 15
     HT.TextXAlignment = Enum.TextXAlignment.Left
     HT.Parent = H
 
     local CB = Instance.new("TextButton")
-    CB.Size = UDim2.new(0, 24, 0, 22)
-    CB.Position = UDim2.new(1, -30, 0, 7)
+    CB.Size = UDim2.new(0, 26, 0, 24)
+    CB.Position = UDim2.new(1, -32, 0, 8)
     CB.BackgroundColor3 = Color3.fromRGB(220, 30, 30)
     CB.TextColor3 = Color3.fromRGB(255, 255, 255)
-    CB.Text = "X"
+    CB.Text = "✕"
     CB.Font = Enum.Font.SourceSansBold
-    CB.TextSize = 13
+    CB.TextSize = 14
     CB.Parent = H
-    Instance.new("UICorner", CB).CornerRadius = UDim.new(0, 4)
+    Instance.new("UICorner", CB).CornerRadius = UDim.new(0, 5)
     CB.MouseButton1Click:Connect(function()
         NOTAUS()
         GUI:Destroy()
     end)
 
+    -- Sidebar
     local SB = Instance.new("Frame")
-    SB.Size = UDim2.new(0, 140, 1, -36)
-    SB.Position = UDim2.new(0, 0, 0, 36)
+    SB.Size = UDim2.new(0, 150, 1, -40)
+    SB.Position = UDim2.new(0, 0, 0, 40)
     SB.BackgroundColor3 = Color3.fromRGB(22, 22, 22)
     SB.BorderSizePixel = 0
     SB.Parent = M
@@ -258,54 +264,57 @@ function Load()
     SBL.SortOrder = Enum.SortOrder.LayoutOrder
     SBL.Parent = SB
 
+    -- Content
     local CT = Instance.new("Frame")
-    CT.Size = UDim2.new(1, -140, 1, -58)
-    CT.Position = UDim2.new(0, 140, 0, 36)
+    CT.Size = UDim2.new(1, -150, 1, -65)
+    CT.Position = UDim2.new(0, 150, 0, 40)
     CT.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
     CT.BorderSizePixel = 0
     CT.Parent = M
 
+    -- Footer
     local FT = Instance.new("Frame")
-    FT.Size = UDim2.new(1, -140, 0, 22)
-    FT.Position = UDim2.new(0, 140, 1, -22)
+    FT.Size = UDim2.new(1, -150, 0, 25)
+    FT.Position = UDim2.new(0, 150, 1, -25)
     FT.BackgroundColor3 = Color3.fromRGB(22, 22, 22)
     FT.BorderSizePixel = 0
     FT.Parent = M
 
-    local FL = Instance.new("TextLabel")
-    FL.Size = UDim2.new(0.5, 0, 1, 0)
-    FL.Position = UDim2.new(0, 8, 0, 0)
-    FL.BackgroundTransparency = 1
-    FL.TextColor3 = Color3.fromRGB(150, 150, 150)
-    FL.Text = "Welcome, " .. LocalPlayer.Name
-    FL.Font = Enum.Font.SourceSans
-    FL.TextSize = 11
-    FL.TextXAlignment = Enum.TextXAlignment.Left
-    FL.Parent = FT
-
-    local FR = Instance.new("TextLabel")
-    FR.Size = UDim2.new(0.5, 0, 1, 0)
-    FR.Position = UDim2.new(0.5, -8, 0, 0)
-    FR.BackgroundTransparency = 1
-    FR.TextColor3 = Color3.fromRGB(150, 150, 150)
-    FR.Text = "FPS: --"
-    FR.Font = Enum.Font.SourceSans
-    FR.TextSize = 11
-    FR.TextXAlignment = Enum.TextXAlignment.Right
-    FR.Parent = FT
-
+    -- Player avatar image
+    local Avatar = Instance.new("ImageLabel")
+    Avatar.Size = UDim2.new(0, 30, 0, 30)
+    Avatar.Position = UDim2.new(0.5, -200, 0.5, -15)
+    Avatar.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+    Avatar.BorderSizePixel = 0
+    Avatar.Parent = FT
+    Instance.new("UICorner", Avatar).CornerRadius = UDim.new(0, 15)
+    
+    -- Load avatar
     task.spawn(function()
-        while GUI and GUI.Parent do
-            local fps = math.floor(1 / task.wait())
-            pcall(function() FR.Text = "FPS: " .. fps end)
-        end
+        local userId = LocalPlayer.UserId
+        local thumbType = Enum.ThumbnailType.HeadShot
+        local thumbSize = Enum.ThumbnailSize.Size48x48
+        local content, isReady = Players:GetUserThumbnailAsync(userId, thumbType, thumbSize)
+        Avatar.Image = content
     end)
 
+    local FL = Instance.new("TextLabel")
+    FL.Size = UDim2.new(1, 0, 1, 0)
+    FL.Position = UDim2.new(0, 0, 0, 0)
+    FL.BackgroundTransparency = 1
+    FL.TextColor3 = Color3.fromRGB(150, 150, 150)
+    FL.Text = "  Welcome, " .. LocalPlayer.Name .. "  |  plalettescripts"
+    FL.Font = Enum.Font.SourceSans
+    FL.TextSize = 11
+    FL.TextXAlignment = Enum.TextXAlignment.Center
+    FL.Parent = FT
+
+    -- Tabs
     local tabs = {}
 
     local function MakeTab(name, icon)
         local b = Instance.new("TextButton")
-        b.Size = UDim2.new(1, -10, 0, 30)
+        b.Size = UDim2.new(1, -10, 0, 32)
         b.BackgroundColor3 = Color3.fromRGB(28, 28, 28)
         b.TextColor3 = Color3.fromRGB(180, 180, 180)
         b.Text = "  " .. icon .. "  " .. name
@@ -356,7 +365,7 @@ function Load()
 
     local function Sec(p, t)
         local f = Instance.new("Frame")
-        f.Size = UDim2.new(1, 0, 0, 18)
+        f.Size = UDim2.new(1, 0, 0, 20)
         f.BackgroundTransparency = 1
         f.Parent = p
         local l = Instance.new("TextLabel")
@@ -368,12 +377,12 @@ function Load()
         l.TextSize = 11
         l.TextXAlignment = Enum.TextXAlignment.Left
         l.Parent = f
-        p.CanvasSize = UDim2.new(0, 0, 0, p.CanvasSize.Y.Offset + 22)
+        p.CanvasSize = UDim2.new(0, 0, 0, p.CanvasSize.Y.Offset + 24)
     end
 
     local function Tog(p, n, varName)
         local f = Instance.new("Frame")
-        f.Size = UDim2.new(1, 0, 0, 30)
+        f.Size = UDim2.new(1, 0, 0, 32)
         f.BackgroundColor3 = Color3.fromRGB(28, 28, 28)
         f.Parent = p
         Instance.new("UICorner", f).CornerRadius = UDim.new(0, 6)
@@ -390,20 +399,20 @@ function Load()
         l.Parent = f
 
         local tr = Instance.new("Frame")
-        tr.Size = UDim2.new(0, 38, 0, 20)
-        tr.Position = UDim2.new(1, -48, 0, 5)
+        tr.Size = UDim2.new(0, 40, 0, 22)
+        tr.Position = UDim2.new(1, -50, 0, 5)
         tr.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
         tr.BorderSizePixel = 0
         tr.Parent = f
-        Instance.new("UICorner", tr).CornerRadius = UDim.new(0, 10)
+        Instance.new("UICorner", tr).CornerRadius = UDim.new(0, 11)
 
         local th = Instance.new("Frame")
-        th.Size = UDim2.new(0, 16, 0, 16)
+        th.Size = UDim2.new(0, 18, 0, 18)
         th.Position = UDim2.new(0, 2, 0, 2)
         th.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
         th.BorderSizePixel = 0
         th.Parent = tr
-        Instance.new("UICorner", th).CornerRadius = UDim.new(0, 8)
+        Instance.new("UICorner", th).CornerRadius = UDim.new(0, 9)
 
         local tb = Instance.new("TextButton")
         tb.Size = UDim2.new(1, 0, 1, 0)
@@ -414,7 +423,6 @@ function Load()
         local on = false
         tb.MouseButton1Click:Connect(function()
             on = not on
-            -- DIREKT in Variable schreiben
             if varName == "Aimbot" then AimbotOn = on
             elseif varName == "Silent" then SilentOn = on
             elseif varName == "Trigger" then TriggerOn = on
@@ -429,23 +437,27 @@ function Load()
             elseif varName == "AFK" then AFKOn = on
             end
             l.Text = n .. ": " .. (on and "ON" or "OFF")
-            tr.BackgroundColor3 = on and Color3.fromRGB(91, 81, 244) or Color3.fromRGB(50, 50, 50)
-            th.Position = on and UDim2.new(1, -18, 0, 2) or UDim2.new(0, 2, 0, 2)
-            th.BackgroundColor3 = on and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(200, 200, 200)
+            if on then
+                TweenService:Create(tr, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(91, 81, 244)}):Play()
+                TweenService:Create(th, TweenInfo.new(0.2), {Position = UDim2.new(1, -20, 0, 2), BackgroundColor3 = Color3.fromRGB(255, 255, 255)}):Play()
+            else
+                TweenService:Create(tr, TweenInfo.new(0.2), {BackgroundColor3 = Color3.fromRGB(50, 50, 50)}):Play()
+                TweenService:Create(th, TweenInfo.new(0.2), {Position = UDim2.new(0, 2, 0, 2), BackgroundColor3 = Color3.fromRGB(200, 200, 200)}):Play()
+            end
         end)
-        p.CanvasSize = UDim2.new(0, 0, 0, p.CanvasSize.Y.Offset + 34)
+        p.CanvasSize = UDim2.new(0, 0, 0, p.CanvasSize.Y.Offset + 36)
     end
 
     local function Sli(p, n, varName, min, max, def)
         local f = Instance.new("Frame")
-        f.Size = UDim2.new(1, 0, 0, 44)
+        f.Size = UDim2.new(1, 0, 0, 46)
         f.BackgroundColor3 = Color3.fromRGB(28, 28, 28)
         f.Parent = p
         Instance.new("UICorner", f).CornerRadius = UDim.new(0, 6)
 
         local l = Instance.new("TextLabel")
         l.Size = UDim2.new(0.4, 0, 0, 18)
-        l.Position = UDim2.new(0, 10, 0, 3)
+        l.Position = UDim2.new(0, 10, 0, 4)
         l.BackgroundTransparency = 1
         l.TextColor3 = Color3.fromRGB(220, 220, 220)
         l.Text = n
@@ -456,7 +468,7 @@ function Load()
 
         local vl = Instance.new("TextLabel")
         vl.Size = UDim2.new(0, 40, 0, 18)
-        vl.Position = UDim2.new(1, -50, 0, 3)
+        vl.Position = UDim2.new(1, -50, 0, 4)
         vl.BackgroundTransparency = 1
         vl.TextColor3 = Color3.fromRGB(91, 81, 244)
         vl.Text = tostring(def)
@@ -467,7 +479,7 @@ function Load()
 
         local inp = Instance.new("TextBox")
         inp.Size = UDim2.new(0.3, 0, 0, 20)
-        inp.Position = UDim2.new(0.35, 0, 0, 22)
+        inp.Position = UDim2.new(0.35, 0, 0, 24)
         inp.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
         inp.TextColor3 = Color3.fromRGB(255, 255, 255)
         inp.Text = tostring(def)
@@ -488,43 +500,45 @@ function Load()
                 vl.Text = tostring(v)
             end
         end)
-        p.CanvasSize = UDim2.new(0, 0, 0, p.CanvasSize.Y.Offset + 48)
+        p.CanvasSize = UDim2.new(0, 0, 0, p.CanvasSize.Y.Offset + 50)
     end
 
-    -- Tabs
-    local home = MakeTab("Home", "HS")
-    local combat = MakeTab("Combat", "CO")
-    local visual = MakeTab("Visuals", "VI")
-    local char = MakeTab("Char", "CH")
-    local sett = MakeTab("Settings", "SE")
+    -- Build Tabs
+    local home = MakeTab("Home", "🏠")
+    local combat = MakeTab("Combat", "🎯")
+    local visual = MakeTab("Visuals", "👁")
+    local char = MakeTab("Char", "🏃")
+    local sett = MakeTab("Settings", "⚙️")
 
+    -- HOME
     local wf = Instance.new("Frame")
-    wf.Size = UDim2.new(1, 0, 0, 80)
+    wf.Size = UDim2.new(1, 0, 0, 90)
     wf.BackgroundColor3 = Color3.fromRGB(28, 28, 28)
     wf.Parent = home
     Instance.new("UICorner", wf).CornerRadius = UDim.new(0, 8)
     local wt = Instance.new("TextLabel")
     wt.Size = UDim2.new(1, -20, 0, 30)
-    wt.Position = UDim2.new(0, 10, 0, 10)
+    wt.Position = UDim2.new(0, 10, 0, 12)
     wt.BackgroundTransparency = 1
     wt.TextColor3 = Color3.fromRGB(255, 255, 255)
-    wt.Text = "Welcome, " .. LocalPlayer.Name
+    wt.Text = "Welcome, " .. LocalPlayer.Name .. " 👋"
     wt.Font = Enum.Font.SourceSansBold
     wt.TextSize = 18
     wt.TextXAlignment = Enum.TextXAlignment.Left
     wt.Parent = wf
     local wi = Instance.new("TextLabel")
     wi.Size = UDim2.new(1, -20, 0, 30)
-    wi.Position = UDim2.new(0, 10, 0, 40)
+    wi.Position = UDim2.new(0, 10, 0, 45)
     wi.BackgroundTransparency = 1
     wi.TextColor3 = Color3.fromRGB(160, 160, 160)
-    wi.Text = "v5.0 | plalettescripts"
+    wi.Text = "Pistol Arena v5.1 | plalettescripts\nCTRL = Hide | X = NOTAUS"
     wi.Font = Enum.Font.SourceSans
     wi.TextSize = 13
     wi.TextXAlignment = Enum.TextXAlignment.Left
     wi.Parent = wf
-    home.CanvasSize = UDim2.new(0, 0, 0, 100)
+    home.CanvasSize = UDim2.new(0, 0, 0, 110)
 
+    -- COMBAT
     Sec(combat, "Aimbot")
     Tog(combat, "FOV Aimbot", "Aimbot")
     Sli(combat, "FOV Radius", "AimR", 30, 300, 120)
@@ -534,11 +548,13 @@ function Load()
     Tog(combat, "Hitbox Expander", "Hitbox")
     Sli(combat, "Hitbox Size", "HitS", 1, 8, 3)
 
+    -- VISUALS
     Sec(visual, "ESP")
     Tog(visual, "Player ESP", "ESP")
     Tog(visual, "Tracers", "Tracers")
     Tog(visual, "Radar", "Radar")
 
+    -- CHARACTER
     Sec(char, "Movement")
     Tog(char, "Speed Hack", "Speed")
     Sli(char, "Walk Speed", "SpdV", 16, 28, 24)
@@ -547,11 +563,12 @@ function Load()
     Tog(char, "Fly", "Fly")
     Sli(char, "Fly Speed", "FlyV", 15, 35, 25)
 
+    -- SETTINGS
     Sec(sett, "World")
     Tog(sett, "Fullbright", "Bright")
     Tog(sett, "Anti-AFK", "AFK")
     local cf = Instance.new("Frame")
-    cf.Size = UDim2.new(1, 0, 0, 60)
+    cf.Size = UDim2.new(1, 0, 0, 70)
     cf.BackgroundColor3 = Color3.fromRGB(28, 28, 28)
     cf.Parent = sett
     Instance.new("UICorner", cf).CornerRadius = UDim.new(0, 8)
@@ -560,12 +577,12 @@ function Load()
     cr.Position = UDim2.new(0, 10, 0, 10)
     cr.BackgroundTransparency = 1
     cr.TextColor3 = Color3.fromRGB(160, 160, 160)
-    cr.Text = "v5.0 | plalettescripts\nPass: plalette1 | X = NOTAUS"
+    cr.Text = "v5.1 | plalettescripts\nPass: plalette1 | X = NOTAUS"
     cr.Font = Enum.Font.SourceSans
     cr.TextSize = 11
     cr.TextXAlignment = Enum.TextXAlignment.Left
     cr.Parent = cf
-    sett.CanvasSize = UDim2.new(0, 0, 0, sett.CanvasSize.Y.Offset + 80)
+    sett.CanvasSize = UDim2.new(0, 0, 0, sett.CanvasSize.Y.Offset + 90)
 
     -- ==================== FEATURES ====================
 
@@ -620,12 +637,11 @@ function Load()
     task.spawn(function()
         while task.wait(0.3) do
             if HitboxOn then
-                local s = HitboxSz
                 for _, p in ipairs(Players:GetPlayers()) do
                     if p ~= LocalPlayer and p.Character then
                         local hrp = p.Character:FindFirstChild("HumanoidRootPart")
                         if hrp then
-                            hrp.Size = Vector3.new(s, s, s)
+                            hrp.Size = Vector3.new(HitboxSz, HitboxSz, HitboxSz)
                             hrp.Transparency = 0.35
                         end
                     end
@@ -721,8 +737,7 @@ function Load()
                                 end
                             end
                         end
-                    end
-                end
+                    end                end
             end
         end
     end)
@@ -796,5 +811,5 @@ function Load()
         end
     end)
 
-    print("v5.0 loaded")
+    print("Pistol Arena v5.1 | plalettescripts")
 end
